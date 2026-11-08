@@ -1,60 +1,56 @@
-#include<bits/stdc++.h>
-#include<vector>
+#include <bits/stdc++.h>
+#include <vector>
 using namespace std;
-struct Activity{
+struct Activity
+{
 
-       char n[10];
-       int st,ft;
+    string n;// name of activity, used string cause name of activity can be in words
+    int st, ft;// start time and finish time of activity
 };
-
-int main(){
+// using custom sort function to sort the activities according to finish time
+bool customSort(Activity a1, Activity a2)
+{
+    return a1.ft < a2.ft;
+}
+int main()
+{
 
     int n;
     cout << "Enter the number of activities: ";
     cin >> n;
 
-    Activity activity [n];
-    for (int i=0;i<n;i++){
+   vector<Activity> v(n);// using vector insted of array cause variable size of array is not allowed in c++
+    for (int i = 0; i < n; i++)
+    {
 
-        cout << "Enter the name of activity " << i+1 << " : ";
-        cin >> activity[i].n;
-        cout << "Enter the start time of activity " << i+1 << " : ";
-        cin >> activity[i].st;
-        cout << "Enter the finish time of activity " << i+1 << " : ";
-        cin >> activity[i].ft;
+        cout << "Enter the name of activity " << i + 1 << " : ";
+        cin >> v[i].n;// taking name of activity as input
+        cout << "Enter the start time of activity " << i + 1 << " : ";
+        cin >> v[i].st;// taking start time of activity as input
+        cout << "Enter the finish time of activity " << i + 1 << " : ";
+        cin >> v[i].ft;// taking finish time of activity as input
     }
 
-    for (int i=0;i<n-1;i++){
-        for (int j=i+1;j<n;j++){
-            if (activity[i].ft > activity[j].ft){
+    sort(v.begin(), v.end(), customSort);// sorting the activities according to finish time using custom sort function, removing the need of creating a new array to store the sorted activities
 
-                Activity temp = activity[i];
-                activity[i] = activity[j];
-                activity[j] = temp;
-            }
+    vector<string> sa;// vector to store the selected activities
+    sa.push_back(v[0].n);//pushback function is used to add the first activity to the selected activities vector
+    int let = v[0].ft;// let is the finish time of the last selected activity, initialized to the finish time of the first activity
+    int count = 1;// count is the number of selected activities, initialized to 1 as the first activity is already selected
+
+    for (int i = 1; i < n; i++)// starting from 1 as the first activity is already selected
+    {
+        if (v[i].st >= let)
+        {
+            sa.push_back(v[i].n);
+            let = v[i].ft;
+            count++;
         }
     }
 
-            vector <string> sa;
-            sa.push_back(activity[0].n);
-            int let = activity[0].ft;
-            int count = 1;
+    cout << "Total number of selected activities are: " << count << endl;
+    cout << "Selected activities are: " << endl;
+    for (int i = 0; i < sa.size(); i++)// printing the selected activities
 
-            for (int i=1;i<n;i++){
-                if (activity[i].st >= let){
-                    sa.push_back(activity[i].n);
-                    let = activity[i].ft;
-                    count ++;
-                }
-            }
-
-
-            cout << "Total number of selected activities are: " << count << endl;
-            cout << "Selected activities are: " << endl;
-            for (int i=0;i<sa.size();i++)
-
-                cout << sa[i] << endl;
-
-
-
+        cout << sa[i] << endl;
 }
